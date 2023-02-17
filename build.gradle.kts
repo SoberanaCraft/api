@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.8.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
+    id("io.ktor.plugin") version "2.2.3"
     application
 }
 
@@ -48,5 +49,11 @@ kotlin {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("org.siscode.soberanacraft.MainKt")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("soberana-backend-all.jar")
+    }
 }
