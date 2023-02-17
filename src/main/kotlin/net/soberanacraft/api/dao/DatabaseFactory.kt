@@ -1,11 +1,11 @@
-package org.siscode.soberanacraft.dao
+package net.soberanacraft.api.dao
 
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.siscode.soberanacraft.models.*
+import net.soberanacraft.api.models.*
 
 
 object DatabaseFactory {

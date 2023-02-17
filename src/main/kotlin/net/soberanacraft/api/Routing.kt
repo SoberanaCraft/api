@@ -1,4 +1,4 @@
-package org.siscode.soberanacraft
+package net.soberanacraft.api
 
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -7,10 +7,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.jetbrains.exposed.sql.update
-import org.siscode.soberanacraft.dao.DaoFacadeImpl
-import org.siscode.soberanacraft.discord.client.DiscordAPI
-import org.siscode.soberanacraft.discord.client.DiscordOAuth
-import org.siscode.soberanacraft.models.*
+import net.soberanacraft.api.dao.DaoFacadeImpl
+import net.soberanacraft.api.discord.client.DiscordAPI
+import net.soberanacraft.api.discord.client.DiscordOAuth
+import net.soberanacraft.api.models.*
 import java.util.*
 
 val dao = DaoFacadeImpl()

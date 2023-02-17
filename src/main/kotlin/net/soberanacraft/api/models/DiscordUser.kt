@@ -1,4 +1,4 @@
-package org.siscode.soberanacraft.models
+package net.soberanacraft.api.models
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -6,9 +6,9 @@ import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.timestamp
-import org.siscode.soberanacraft.discord.client.DiscordOAuth
-import org.siscode.soberanacraft.discord.model.TokensResponse
-import org.siscode.soberanacraft.discord.model.User
+import net.soberanacraft.api.discord.client.DiscordOAuth
+import net.soberanacraft.api.discord.model.TokensResponse
+import net.soberanacraft.api.discord.model.User
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
 

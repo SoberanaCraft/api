@@ -1,4 +1,4 @@
-package org.siscode.soberanacraft.discord.client
+package net.soberanacraft.api.discord.client
 
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
@@ -12,8 +12,8 @@ import io.ktor.http.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
-import org.siscode.soberanacraft.discord.model.TokensResponse
-import org.siscode.soberanacraft.models.Config
+import net.soberanacraft.api.discord.model.TokensResponse
+import net.soberanacraft.api.models.Config
 
 
 object DiscordOAuth {

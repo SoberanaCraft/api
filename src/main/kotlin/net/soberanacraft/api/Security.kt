@@ -1,4 +1,4 @@
-package org.siscode.soberanacraft
+package net.soberanacraft.api
 
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

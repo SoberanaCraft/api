@@ -1,8 +1,8 @@
-package org.siscode.soberanacraft.discord
+package net.soberanacraft.api.discord
 
 import mu.KotlinLogging
-import org.siscode.soberanacraft.discord.client.DiscordOAuth
-import org.siscode.soberanacraft.models.Config
+import net.soberanacraft.api.discord.client.DiscordOAuth
+import net.soberanacraft.api.models.Config
 
 object DiscordFactory {
     private val logger = KotlinLogging.logger {}

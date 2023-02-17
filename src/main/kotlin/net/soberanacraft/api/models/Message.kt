@@ -1,10 +1,10 @@
 @file:Suppress("unused")
 
-package org.siscode.soberanacraft.models
+package net.soberanacraft.api.models
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import org.siscode.soberanacraft.UUIDSerializer
+import net.soberanacraft.api.UUIDSerializer
 import java.util.UUID
 
 @Serializable

@@ -1,12 +1,12 @@
-package org.siscode.soberanacraft.dao
+package net.soberanacraft.api.dao
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.siscode.soberanacraft.dao.DatabaseFactory.dbQuery
-import org.siscode.soberanacraft.models.*
+import net.soberanacraft.api.dao.DatabaseFactory.dbQuery
+import net.soberanacraft.api.models.*
 import java.util.*
 
 class DaoFacadeImpl : DaoFacade {

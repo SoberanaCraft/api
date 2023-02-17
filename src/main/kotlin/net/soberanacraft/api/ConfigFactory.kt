@@ -1,9 +1,9 @@
-package org.siscode.soberanacraft
+package net.soberanacraft.api
 
 import mu.KotlinLogging
-import org.siscode.soberanacraft.models.Config
-import org.siscode.soberanacraft.models.from
-import org.siscode.soberanacraft.models.new
+import net.soberanacraft.api.models.Config
+import net.soberanacraft.api.models.from
+import net.soberanacraft.api.models.new
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 

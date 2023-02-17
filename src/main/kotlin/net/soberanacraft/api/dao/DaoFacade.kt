@@ -1,6 +1,6 @@
-package org.siscode.soberanacraft.dao
+package net.soberanacraft.api.dao
 
-import org.siscode.soberanacraft.models.*
+import net.soberanacraft.api.models.*
 import java.util.UUID
 
 interface DaoFacade {

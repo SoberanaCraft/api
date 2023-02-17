@@ -1,4 +1,4 @@
-package org.siscode.soberanacraft.models
+package net.soberanacraft.api.models
 
 import com.akuleshov7.ktoml.file.TomlFileReader
 import com.akuleshov7.ktoml.file.TomlFileWriter

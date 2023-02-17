@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.siscode.soberanacraft.discord.model
+package net.soberanacraft.api.discord.model
 
 enum class Permission(val flag: Long) {
     CREATE_INSTANT_INVITE(0x00000001),

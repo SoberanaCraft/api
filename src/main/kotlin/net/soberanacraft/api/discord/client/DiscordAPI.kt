@@ -1,11 +1,11 @@
-package org.siscode.soberanacraft.discord.client
+package net.soberanacraft.api.discord.client
 
 import io.ktor.client.request.*
 import io.ktor.http.*
 import mu.KotlinLogging
-import org.siscode.soberanacraft.discord.model.Member
-import org.siscode.soberanacraft.discord.model.PartialGuild
-import org.siscode.soberanacraft.discord.model.User
+import net.soberanacraft.api.discord.model.Member
+import net.soberanacraft.api.discord.model.PartialGuild
+import net.soberanacraft.api.discord.model.User
 
 class DiscordAPI(private val accessToken: String) {
     private val logger = KotlinLogging.logger {  }

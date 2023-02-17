@@ -5,7 +5,7 @@ plugins {
     application
 }
 
-group = "org.siscode.soberanacraft"
+group = "net.soberanacraft.api"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -49,7 +49,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("org.siscode.soberanacraft.MainKt")
+    mainClass.set("net.soberanacraft.api.MainKt")
 }
 
 ktor {

@@ -1,9 +1,9 @@
-package org.siscode.soberanacraft.models
+package net.soberanacraft.api.models
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
-import org.siscode.soberanacraft.UUIDSerializer
+import net.soberanacraft.api.UUIDSerializer
 import java.util.UUID
 
 object Connections : Table() {
