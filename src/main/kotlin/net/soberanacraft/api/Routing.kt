@@ -260,6 +260,15 @@ fun Application.configureRouting() {
                 call.respond(SucessMessage("Player: ${player.nickname} (${player.uuid}) disconnected from Server: ${server.name}."))
             }
 
+            post("/server/update") {
+                val server = call.receive<ServerStub>()
+                val existingServer = dao.serverByName(server.name)
+                    ?: return@post call.respond(
+                        ErrorMessage("A server with name: ${server.name} doesn't exist.")
+                    )
+                return@post call.respond(dao.updateServer(existingServer.id, server))
+            }
+
             post("/server/create") {
                 val server = call.receive<ServerStub>()
                 val existingServer = dao.serverByName(server.name)
