@@ -36,8 +36,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
     implementation("org.xerial:sqlite-jdbc:3.40.1.0")
 
-    implementation("com.akuleshov7:ktoml-core:0.4.0")
-    implementation("com.akuleshov7:ktoml-file:0.4.0")
+    implementation("com.akuleshov7:ktoml-core:0.4.1")
+    implementation("com.akuleshov7:ktoml-file:0.4.1")
 
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.slf4j:slf4j-simple:2.0.3")
