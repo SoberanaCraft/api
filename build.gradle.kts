@@ -23,6 +23,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:2.2.3")
     implementation("io.ktor:ktor-server-auth:2.2.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.3")
+    implementation("io.ktor:ktor-server-websockets:2.2.3")
 
     implementation("io.ktor:ktor-client-core:2.2.3")
     implementation("io.ktor:ktor-client-cio:2.2.3")
