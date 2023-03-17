@@ -141,7 +141,7 @@ fun Application.configureRouting() {
                 call.respond("Hello ${call.principal<UserIdPrincipal>()?.name}!")
             }
 
-            post("/player/create/") {
+            post("/player/create") {
                 val player = call.receive<PlayerStub>()
                 val newPlayer = dao.addNewPlayer(player.uuid, player.nickname, player.platform)
                     ?: call.respond(ErrorMessage("A player with uuid: ${player.uuid} already exists."))
