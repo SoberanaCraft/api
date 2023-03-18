@@ -5,12 +5,14 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.flow.*
 import org.apache.commons.lang3.RandomStringUtils
 import org.jetbrains.exposed.sql.update
 import net.soberanacraft.api.dao.DaoFacadeImpl
 import net.soberanacraft.api.discord.client.DiscordAPI
 import net.soberanacraft.api.discord.client.DiscordOAuth
 import net.soberanacraft.api.models.*
+import net.soberanacraft.api.ws.playerLinkWebSocket
 import java.util.*
 
 val dao = DaoFacadeImpl()
@@ -43,31 +45,35 @@ fun Application.configureRouting() {
             if (player.discordId != null)
                 return@get call.respond(LinkMessage(player.uuid, LinkStatus.AlreadyLinked, player.discordId, player.joinedAt))
 
-            val tokens = DiscordOAuth.getTokens(code) ?: return@get call.respond(
+            val tokens = DiscordOAuth.getTokens(code) ?: return@get call.flowRespond(
                 LinkMessage(
                     playerUUID,
                     LinkStatus.InvalidDiscord,
                     null,
                     null
-                )
-            )
-            val api = DiscordAPI(tokens.accessToken)
-            val user = api.user() ?: return@get call.respond(
-                LinkMessage(
-                    playerUUID,
-                    LinkStatus.InvalidDiscord,
-                    null,
-                    null
-                )
+                ),
+                Flows.LinkMessage
             )
 
-            val member = api.member(828778305691844609UL) ?: return@get call.respond(
+            val api = DiscordAPI(tokens.accessToken)
+            val user = api.user() ?: return@get call.flowRespond(
+                LinkMessage(
+                    playerUUID,
+                    LinkStatus.InvalidDiscord,
+                    null,
+                    null
+                ),
+                Flows.LinkMessage
+            )
+
+            val member = api.member(828778305691844609UL) ?: return@get call.flowRespond(
                 LinkMessage(
                     playerUUID,
                     LinkStatus.NotJoinedToGuild,
                     user.id,
                     null
-                )
+                ),
+                Flows.LinkMessage
             )
 
             val discordUser = user.into(member.joinedAt, member.nickname, tokens)
@@ -75,7 +81,7 @@ fun Application.configureRouting() {
             dao.clearExistingNonceOf(playerUUID)
             dao.link(playerUUID, discordUser.id, discordUser.trust())
 
-            return@get call.respond(LinkMessage(playerUUID, LinkStatus.JoinedGuild, user.id, member.joinedAt))
+            return@get call.flowRespond(LinkMessage(playerUUID, LinkStatus.JoinedGuild, user.id, member.joinedAt), Flows.LinkMessage)
         }
 
         get("/nonce") {
@@ -134,6 +140,8 @@ fun Application.configureRouting() {
                 )
             call.respond(server)
         }
+        /// WebSocket
+        playerLinkWebSocket()
 
         /// Reserved Routes
         authenticate("auth-bearer") {
@@ -302,9 +310,14 @@ fun Application.configureRouting() {
     }
 }
 
+private suspend inline fun <reified T : Any> ApplicationCall.flowRespond(value: T, flow: MutableSharedFlow<T>) {
+    respond(value)
+    flow.emit(value)
+}
+
 private fun String.into(): UUID = UUID.fromString(this)
 
-private fun String.safeInto(): UUID? {
+fun String.safeInto(): UUID? {
     return try {
         this.into()
     } catch (_: IllegalArgumentException) {

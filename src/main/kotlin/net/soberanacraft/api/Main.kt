@@ -1,14 +1,24 @@
 package net.soberanacraft.api
 
+import io.ktor.serialization.kotlinx.*
 import io.ktor.server.websocket.*
 import io.ktor.server.application.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.serialization.json.Json
 import net.soberanacraft.api.dao.DatabaseFactory
 import net.soberanacraft.api.discord.DiscordFactory
+import net.soberanacraft.api.models.LinkMessage
 
 fun main(args: Array<String>) : Unit = io.ktor.server.netty.EngineMain.main(args)
 
+object Flows {
+    val LinkMessage = MutableSharedFlow<LinkMessage>()
+}
+
 fun Application.module() {
-    install(WebSockets)
+    install(WebSockets) {
+        contentConverter = KotlinxWebsocketSerializationConverter(Json)
+    }
     ConfigFactory.init("config.toml")
     DiscordFactory.init(ConfigFactory.config)
     DatabaseFactory.init()
