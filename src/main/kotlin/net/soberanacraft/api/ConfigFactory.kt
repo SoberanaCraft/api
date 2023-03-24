@@ -18,8 +18,14 @@ object ConfigFactory {
     }
 
     private fun createIfNotFound(path: String) {
-        if (Path(path).exists()) return
-        logger.error { "No config was found. Creating the default one." }
+	val _path = Path(path)
+	if (_path.exists()) return
+
+	if (_path.toFile().parentFile.mkdirs()) {
+	    logger.warn { "Subdirectories created." } 
+	}
+
+	logger.error { "No config was found. Creating the default one." }
         new(path)
     }
 }

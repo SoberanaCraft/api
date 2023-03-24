@@ -19,7 +19,10 @@ fun Application.module() {
     install(WebSockets) {
         contentConverter = KotlinxWebsocketSerializationConverter(Json)
     }
-    ConfigFactory.init("config.toml")
+
+    val path = System.getenv("CONFIG_PATH") ?: "config/config.toml"
+    
+    ConfigFactory.init(path)
     DiscordFactory.init(ConfigFactory.config)
     DatabaseFactory.init()
     configureSecurity()
