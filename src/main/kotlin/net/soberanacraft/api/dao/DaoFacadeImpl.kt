@@ -240,4 +240,37 @@ class DaoFacadeImpl : DaoFacade {
             it[expiresAt] = user.expiresAt.toJavaInstant()
         }.resultedValues?.firstOrNull()?.intoDiscordUser()
     }
+
+    override suspend fun createNewAuthenticatedUser(
+        owner: UUID,
+        discordId: ULong,
+        password: String
+    ): AuthenticatedUser? = dbQuery {
+        Authentication.insert {
+            it[this.owner] = owner
+            it[this.discordId] = discordId
+            it[this.password] = password
+        }.resultedValues?.firstOrNull()?.intoAuthenticatedUser()
+    }
+
+    override suspend fun authenticate(owner: UUID, password: String): Boolean = dbQuery {
+        val user = Authentication.select { Authentication.owner eq owner }.firstOrNull() ?: return@dbQuery false
+        return@dbQuery user.intoAuthenticatedUser().password == password
+    }
+
+    override suspend fun removeAuthenticatedUser(owner: UUID): Boolean = dbQuery {
+        Authentication.deleteWhere { Authentication.owner eq owner } > 0
+    }
+
+    override suspend fun updatePassword(owner: UUID, oldPassword: String, password: String): Boolean = dbQuery {
+        val user = Authentication.select { Authentication.owner eq owner }.firstOrNull() ?: return@dbQuery false
+        if (user.intoAuthenticatedUser().password != oldPassword) return@dbQuery false
+        Authentication.update ({Authentication.owner eq owner}) { it[this.password] = password } > 0
+    }
+
+    override suspend fun updatePassword(owner: ULong, oldPassword: String, password: String): Boolean = dbQuery {
+        val user = Authentication.select { Authentication.discordId eq owner }.firstOrNull() ?: return@dbQuery false
+        if (user.intoAuthenticatedUser().password != oldPassword) return@dbQuery false
+        Authentication.update ({Authentication.discordId eq owner}) { it[this.password] = password } > 0
+    }
 }
