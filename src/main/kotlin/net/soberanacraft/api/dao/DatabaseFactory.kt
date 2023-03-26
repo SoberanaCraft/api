@@ -17,7 +17,7 @@ object DatabaseFactory {
 //        logger.warn("Connecting to Database...")
         val database = Database.connect(jdbcURL, driverClassName)
         transaction(database) {
-            SchemaUtils.create(Players, Servers, Connections, Nonces, Discord)
+            SchemaUtils.create(Players, Servers, Connections, Nonces, Discord, Authentication)
         }
 //        logger.warn("Connected.")
     }
