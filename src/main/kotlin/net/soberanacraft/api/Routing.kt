@@ -194,6 +194,7 @@ fun Application.configureRouting() {
 
                 if(player.discordId != null) {
                     dao.removeUser(player.discordId)
+                    dao.removeAuthenticatedUser(uuid)
                 }
 
                 dao.deleteConnection(uuid)
