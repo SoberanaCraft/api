@@ -201,6 +201,60 @@ fun Application.configureRouting() {
                 return@delete call.respond(dao.deletePlayer(uuid))
             }
 
+            post("/player/auth") {
+                val code =
+                    call.request.queryParameters["owner"] ?: return@post call.respond(ErrorMessage("Missing owner."))
+
+                val code2 =
+                    call.request.queryParameters["password"] ?: return@post call.respond(ErrorMessage("Missing password."))
+
+                val playerUUID = code.safeInto() ?: return@post call.respond(InvalidUUIDMessage("owner", code))
+
+                return@post call.respond(dao.authenticate(playerUUID, code2))
+            }
+
+            post("/player/register") {
+                val code =
+                    call.request.queryParameters["owner"] ?: return@post call.respond(ErrorMessage("Missing owner."))
+
+                val code2 =
+                    call.request.queryParameters["discordId"] ?: return@post call.respond(ErrorMessage("Missing discordId."))
+
+                val code3 =
+                    call.request.queryParameters["password"] ?: return@post call.respond(ErrorMessage("Missing password."))
+
+                val playerUUID = code.safeInto() ?: return@post call.respond(InvalidUUIDMessage("owner", code))
+                dao.getUser(code2.toULong()) ?: return@post call.respond(ErrorMessage("Discord user with ID $code2 not found."))
+
+                val user = dao.createNewAuthenticatedUser(playerUUID, code2.toULong(), code3) ?: return@post call.respond(ErrorMessage("Player with UUID: $playerUUID could not be found."))
+
+                return@post call.respond(user)
+            }
+
+            post("/player/auth/update") {
+                val code =
+                    call.request.queryParameters["owner"] ?: return@post call.respond(ErrorMessage("Missing owner."))
+
+                val code2 =
+                    call.request.queryParameters["old"] ?: return@post call.respond(ErrorMessage("Missing old."))
+
+                val code3 =
+                    call.request.queryParameters["new"] ?: return@post call.respond(ErrorMessage("Missing new."))
+
+                val playerUUID = code.safeInto() ?: return@post call.respond(InvalidUUIDMessage("owner", code))
+
+                return@post call.respond(dao.updatePassword(playerUUID, code2, code3))
+            }
+
+            delete("/player/unregister") {
+                val code =
+                    call.request.queryParameters["owner"] ?: return@delete call.respond(ErrorMessage("Missing owner."))
+
+                val playerUUID = code.safeInto() ?: return@delete call.respond(InvalidUUIDMessage("owner", code))
+
+                return@delete call.respond(dao.removeAuthenticatedUser(playerUUID))
+            }
+
             post("/nonce/create") {
                 val uuid =
                     call.request.queryParameters["uuid"] ?: return@post call.respond(ErrorMessage("Missing uuid."))
