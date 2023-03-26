@@ -190,6 +190,14 @@ fun Application.configureRouting() {
                     call.request.queryParameters["uuid"] ?: return@delete call.respond(ErrorMessage("Missing uuid."))
                 val uuid = code.safeInto() ?: return@delete call.respond(InvalidUUIDMessage("uuid", code))
 
+                val player = dao.player(uuid) ?: return@delete call.respond(ErrorMessage("Player with UUID $uuid could not be found."))
+
+                if(player.discordId != null) {
+                    dao.removeUser(player.discordId)
+                }
+
+                dao.deleteConnection(uuid)
+
                 return@delete call.respond(dao.deletePlayer(uuid))
             }
 
