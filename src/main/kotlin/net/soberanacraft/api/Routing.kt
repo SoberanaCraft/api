@@ -203,6 +203,15 @@ fun Application.configureRouting() {
                 return@delete call.respond(dao.deletePlayer(uuid))
             }
 
+            post("/player/auth/isRegistered") {
+                val code =
+                    call.request.queryParameters["owner"] ?: return@post call.respond(ErrorMessage("Missing owner."))
+
+                val playerUUID = code.safeInto() ?: return@post call.respond(InvalidUUIDMessage("owner", code))
+
+                return@post call.respond(dao.isRegistered(playerUUID))
+            }
+
             post("/player/auth") {
                 val code =
                     call.request.queryParameters["owner"] ?: return@post call.respond(ErrorMessage("Missing owner."))

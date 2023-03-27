@@ -281,4 +281,8 @@ class DaoFacadeImpl : DaoFacade {
         val new = hash(password) ?: return@dbQuery false
         Authentication.update ({Authentication.discordId eq owner}) { it[this.password] = new } > 0
     }
+
+    override suspend fun isRegistered(owner: UUID): Boolean  = dbQuery {
+        Authentication.select { Authentication.owner eq owner }.count() > 1
+    }
 }

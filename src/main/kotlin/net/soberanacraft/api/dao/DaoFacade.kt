@@ -58,6 +58,7 @@ interface DaoFacade {
     suspend fun removeAuthenticatedUser(owner: UUID) : Boolean
     suspend fun updatePassword(owner: UUID, oldPassword: String, password: String) : Boolean
     suspend fun updatePassword(owner: ULong, oldPassword: String, password: String) : Boolean
+    suspend fun isRegistered(owner: UUID) : Boolean
 
 }
 
