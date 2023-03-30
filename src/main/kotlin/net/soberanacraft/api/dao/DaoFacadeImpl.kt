@@ -283,6 +283,6 @@ class DaoFacadeImpl : DaoFacade {
     }
 
     override suspend fun isRegistered(owner: UUID): Boolean  = dbQuery {
-        Authentication.select { Authentication.owner eq owner }.count() > 1
+        Authentication.select { Authentication.owner eq owner }.count() > 0
     }
 }
