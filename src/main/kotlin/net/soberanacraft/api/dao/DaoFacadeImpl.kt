@@ -245,7 +245,7 @@ class DaoFacadeImpl : DaoFacade {
 
     override suspend fun createNewAuthenticatedUser(
         owner: UUID,
-        discordId: ULong,
+        discordId: ULong?,
         password: String
     ): AuthenticatedUser? = dbQuery {
         val new = hash(password) ?: return@dbQuery null

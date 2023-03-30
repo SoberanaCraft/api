@@ -235,9 +235,13 @@ fun Application.configureRouting() {
                     call.request.queryParameters["password"] ?: return@post call.respond(ErrorMessage("Missing password."))
 
                 val playerUUID = code.safeInto() ?: return@post call.respond(InvalidUUIDMessage("owner", code))
-                dao.getUser(code2.toULong()) ?: return@post call.respond(ErrorMessage("Discord user with ID $code2 not found."))
+                val discordId = code2.toULongOrNull()
 
-                val user = dao.createNewAuthenticatedUser(playerUUID, code2.toULong(), code3) ?: return@post call.respond(ErrorMessage("Player with UUID: $playerUUID could not be found."))
+                if (discordId != null) {
+                    dao.getUser(discordId) ?: return@post call.respond(ErrorMessage("Discord user with ID $discordId not found."))
+                }
+
+                val user = dao.createNewAuthenticatedUser(playerUUID, discordId, code3) ?: return@post call.respond(ErrorMessage("Player with UUID: $playerUUID could not be found."))
 
                 return@post call.respond(user)
             }
