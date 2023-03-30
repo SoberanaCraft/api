@@ -3,6 +3,8 @@ package net.soberanacraft.api.dao
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toJavaInstant
 import mu.KotlinLogging
+import net.soberanacraft.api.crypt.hash
+import net.soberanacraft.api.crypt.verify
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import net.soberanacraft.api.dao.DatabaseFactory.dbQuery
@@ -239,5 +241,48 @@ class DaoFacadeImpl : DaoFacade {
             it[refreshToken] = user.refreshToken
             it[expiresAt] = user.expiresAt.toJavaInstant()
         }.resultedValues?.firstOrNull()?.intoDiscordUser()
+    }
+
+    override suspend fun createNewAuthenticatedUser(
+        owner: UUID,
+        discordId: ULong?,
+        password: String
+    ): AuthenticatedUser? = dbQuery {
+        val new = hash(password) ?: return@dbQuery null
+
+        Authentication.insert {
+            it[this.owner] = owner
+            it[this.discordId] = discordId
+            it[this.password] = new
+        }.resultedValues?.firstOrNull()?.intoAuthenticatedUser()
+    }
+
+    override suspend fun authenticate(owner: UUID, password: String): Boolean = dbQuery {
+        val user = Authentication.select { Authentication.owner eq owner }.firstOrNull() ?: return@dbQuery false
+        return@dbQuery verify(password,user.intoAuthenticatedUser().password)
+    }
+
+    override suspend fun removeAuthenticatedUser(owner: UUID): Boolean = dbQuery {
+        Authentication.deleteWhere { Authentication.owner eq owner } > 0
+    }
+
+    override suspend fun updatePassword(owner: UUID, oldPassword: String, password: String): Boolean = dbQuery {
+        val user = Authentication.select { Authentication.owner eq owner }.firstOrNull() ?: return@dbQuery false
+        val authenticatedUser = user.intoAuthenticatedUser()
+        if (!verify(oldPassword, authenticatedUser.password)) return@dbQuery false
+        val new = hash(password) ?: return@dbQuery false
+        Authentication.update ({Authentication.owner eq owner}) { it[this.password] = new } > 0
+    }
+
+    override suspend fun updatePassword(owner: ULong, oldPassword: String, password: String): Boolean = dbQuery {
+        val user = Authentication.select { Authentication.discordId eq owner }.firstOrNull() ?: return@dbQuery false
+        val authenticatedUser = user.intoAuthenticatedUser()
+        if (!verify(oldPassword, authenticatedUser.password)) return@dbQuery false
+        val new = hash(password) ?: return@dbQuery false
+        Authentication.update ({Authentication.discordId eq owner}) { it[this.password] = new } > 0
+    }
+
+    override suspend fun isRegistered(owner: UUID): Boolean  = dbQuery {
+        Authentication.select { Authentication.owner eq owner }.count() > 1
     }
 }

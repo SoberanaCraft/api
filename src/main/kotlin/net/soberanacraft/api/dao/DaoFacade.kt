@@ -51,6 +51,15 @@ interface DaoFacade {
     suspend fun updateUser(user: DiscordUser): Boolean
     suspend fun removeUser(id: ULong): Boolean
     suspend fun addNewUser(user: DiscordUser): DiscordUser?
+
+    // Auth DAO
+    suspend fun createNewAuthenticatedUser(owner: UUID, discordId: ULong?, password: String) : AuthenticatedUser?
+    suspend fun authenticate(owner: UUID, password: String) : Boolean
+    suspend fun removeAuthenticatedUser(owner: UUID) : Boolean
+    suspend fun updatePassword(owner: UUID, oldPassword: String, password: String) : Boolean
+    suspend fun updatePassword(owner: ULong, oldPassword: String, password: String) : Boolean
+    suspend fun isRegistered(owner: UUID) : Boolean
+
 }
 
 //var player by Connections.player
