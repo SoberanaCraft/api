@@ -7,7 +7,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.*
 import org.apache.commons.lang3.RandomStringUtils
-import org.jetbrains.exposed.sql.update
 import net.soberanacraft.api.dao.DaoFacadeImpl
 import net.soberanacraft.api.discord.client.DiscordAPI
 import net.soberanacraft.api.discord.client.DiscordOAuth
@@ -176,12 +175,7 @@ fun Application.configureRouting() {
                 )
                     ?: return@post call.respond(ErrorMessage("Player with uuid: $refereeId does not exist."))
 
-                val update = Players.update({ Players.uuid eq player.uuid }) {
-                    it[referer] = referee.uuid
-                    it[trustFactor] = Trust.Reffered
-                }
-
-                return@post call.respond(update > 0)
+                return@post call.respond(dao.refer(player.uuid, referee.uuid))
             }
 
 

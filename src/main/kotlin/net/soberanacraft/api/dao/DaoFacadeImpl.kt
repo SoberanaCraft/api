@@ -71,6 +71,7 @@ class DaoFacadeImpl : DaoFacade {
         logger.trace { "refer[$uuid, $referee]" }
         Players.update({ Players.uuid eq uuid }) {
             it[referer] = referee
+            it[trustFactor] = Trust.Reffered
         } > 0
     }
 
