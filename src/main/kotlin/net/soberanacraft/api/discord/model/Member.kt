@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 data class Member(
     val user: User,
     @SerialName("joined_at") val joinedAt: Instant,
-    @SerialName("nick") val nickname: String
+    @SerialName("nick") val nickname: String?
 )
