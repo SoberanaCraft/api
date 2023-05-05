@@ -65,7 +65,7 @@ fun Application.configureRouting() {
                 Flows.LinkMessage
             )
 
-            val member = api.member(828778305691844609UL) ?: return@get call.flowRespond(
+            val member = api.member(1038487852662661223UL) ?: return@get call.flowRespond(
                 LinkMessage(
                     playerUUID,
                     LinkStatus.NotJoinedToGuild,
